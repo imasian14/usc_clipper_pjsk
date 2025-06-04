@@ -2,6 +2,10 @@ import requests
 import os
 import re
 import subprocess
+import sys
+
+sys.stdout.reconfigure(encoding='utf-8')
+sys.stderr.reconfigure(encoding='utf-8')
 
 # always 4 digits to replace x with level id
 sekai_url = "https://storage.sekai.best/sekai-jp-assets/music/music_score/{song_id}_01/{difficulty}.txt"
