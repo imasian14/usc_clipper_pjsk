@@ -224,7 +224,12 @@ if os.path.exists(usc_folder):
 selected_usc = None
 uploaded_file = st.file_uploader("Drag and drop your .usc file here", type=["usc"])
 if usc_files:
-    selected_usc = st.selectbox("Or select a .usc file from the 'uscs' folder:", ["(None)"] + usc_files)
+    selected_usc = st.selectbox(
+        "Or select a .usc file from the 'uscs' folder (searchable):",
+        ["(None)"] + usc_files,
+        index=0,
+        placeholder="Type to search..."
+    )
 
 start_measure = st.number_input("Start measure", min_value=0, value=0)
 end_measure = st.number_input("End measure", min_value=1, value=1)
