@@ -6,3 +6,5 @@ Main function takes input file path (expecting a .usc), start measure, end measu
 You can get a .usc file by downloading a level.txt file from sekai.best and converting it through MMW4CC, or using this: https://github.com/sevenc-nanashi/usctool
 
 Dependencies: pandas (pip install pandas), numpy (pip install numpy)
+
+To access the clipper via website, use this url: https://usc-clipper.streamlit.app/
