@@ -215,8 +215,8 @@ st.title("Chart Clipper")
 st.write("Upload a .usc file, select start and end measures, and download the clipped chart.")
 
 uploaded_file = st.file_uploader("Drag and drop your .usc file here", type=["usc"])
-start_measure = st.number_input("Start measure", min_value=0, value=0)
-end_measure = st.number_input("End measure", min_value=1, value=1)
+start_measure = st.number_input("Start measure, use /song chart with Sbotga to get desired value.", min_value=0, value=0)
+end_measure = st.number_input("End measure, use /song chart with Sbotga to get desired value.", min_value=1, value=1)
 
 if uploaded_file is not None:
     if st.button("Clip Chart"):
