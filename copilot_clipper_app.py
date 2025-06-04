@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import json
 import io
+import os
 import base64
 import streamlit as st
 
@@ -214,13 +215,35 @@ st.title("Chart Clipper")
 
 st.write("Upload a .usc file, select start and end measures, and download the clipped chart.")
 
+# List .usc files in the 'uscs' folder (relative to this script)
+usc_folder = os.path.join(os.path.dirname(__file__), "official_charts_usc")
+usc_files = []
+if os.path.exists(usc_folder):
+    usc_files = [f for f in os.listdir(usc_folder) if f.lower().endswith(".usc")]
+
+selected_usc = None
 uploaded_file = st.file_uploader("Drag and drop your .usc file here", type=["usc"])
-start_measure = st.number_input("Start measure, use /song chart with Sbotga to get desired value.", min_value=0, value=0)
-end_measure = st.number_input("End measure, use /song chart with Sbotga to get desired value.", min_value=1, value=1)
+if usc_files:
+    selected_usc = st.selectbox("Or select a .usc file from the 'uscs' folder:", ["(None)"] + usc_files)
+
+start_measure = st.number_input("Start measure", min_value=0, value=0)
+end_measure = st.number_input("End measure", min_value=1, value=1)
+
+file_content = None
+filename = None
 
 if uploaded_file is not None:
+    file_content = uploaded_file.read()
+    filename = uploaded_file.name
+elif selected_usc and selected_usc != "(None)":
+    with open(os.path.join(usc_folder, selected_usc), "rb") as f:
+        file_content = f.read()
+    filename = selected_usc
+
+if file_content is not None:
     if st.button("Clip Chart"):
-        clipped_json = process_chart(uploaded_file.read(), start_measure, end_measure)
+        clipped_json = process_chart(file_content, start_measure, end_measure)
         b64 = base64.b64encode(clipped_json.encode()).decode()
-        href = f'<a href="data:application/json;base64,{b64}" download="clipped.usc">Download clipped.usc</a>'
+        out_name = f"clipped_{filename}" if filename else "clipped.usc"
+        href = f'<a href="data:application/json;base64,{b64}" download="{out_name}">Download {out_name}</a>'
         st.markdown(href, unsafe_allow_html=True)
