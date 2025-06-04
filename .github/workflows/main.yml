@@ -1,0 +1,38 @@
+name: SUS Downloader
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download-and-pr:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run sus_downloader.py
+        run: python sus_downloader.py
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add official_charts_sus official_charts_usc
+          git commit -m "Update SUS/USC charts" || echo "No changes to commit"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: Update SUS/USC charts
+          title: Update SUS/USC charts
+          body: Automated update of SUS/USC charts.
+          branch: sus-downloader/update
