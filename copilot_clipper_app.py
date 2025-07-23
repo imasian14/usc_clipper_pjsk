@@ -232,7 +232,7 @@ if usc_files:
     )
 
 start_measure = st.number_input("Start measure", min_value=0, value=0)
-end_measure = st.number_input("End measure", min_value=1, value=1)
+end_measure = st.number_input("End measure", min_value=start_measure, value=max(1, start_measure + 1))
 
 file_content = None
 filename = None
