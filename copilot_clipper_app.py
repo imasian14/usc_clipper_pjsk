@@ -45,6 +45,19 @@ def process_chart(file_content, start_measure, end_measure):
             **object,
             "beat": new_beat
         }
+    
+    def deNull(object):
+        object2 = {**object}
+        if "critical" in object:
+            if object["critical"] is None:
+                object2["critical"] = False
+
+        if "direction" in object:
+            if object["direction"] is None:
+                del object2["direction"]
+
+        return object2
+
 
     bpm_objects = [x for x in objects if return_type(x, "bpm")]
 
@@ -110,6 +123,7 @@ def process_chart(file_content, start_measure, end_measure):
                 speed_change = shifter(speed_change)
                 trimmed_speed_group.append(speed_change)
         return trimmed_speed_group
+    
 
     trimmed_shifted_speed_changes = [speed_trimmer_and_shifter(x) for x in fixed_speed_changes]
 
@@ -124,7 +138,7 @@ def process_chart(file_content, start_measure, end_measure):
         trimmed_shifted_speed_objects.append(new_speed_object(speed_objects[k], trimmed_shifted_speed_changes[k]))
 
     single_objects = [x for x in objects if return_type(x, "single")]
-    shifted_single_objects = [shifter(x) for x in single_objects if trimmer(x)]
+    shifted_single_objects = [deNull(shifter(x)) for x in single_objects if trimmer(x)]
             
     guide_objects = [x for x in objects if return_type(x, "guide")]
 
@@ -146,7 +160,7 @@ def process_chart(file_content, start_measure, end_measure):
             "midpoints": new_midpoint_list
         }
 
-    shifted_guide_objects = [guide_trimmer_and_shifter(x) for x in guide_objects if trim_guide(x)]
+    shifted_guide_objects = [deNull(guide_trimmer_and_shifter(x)) for x in guide_objects if trim_guide(x)]
 
     slide_objects = [x for x in objects if return_type(x, "slide")]
 
@@ -165,7 +179,7 @@ def process_chart(file_content, start_measure, end_measure):
         end_midpoint = None
         for midpoint in slide_midpoints:
             if midpoint['type'] == 'end':
-                end_midpoint = midpoint
+                end_midpoint = deNull(midpoint)
         
         if end_midpoint is None:
             raise Exception("Slide did not contain an ending, this should never happen")
@@ -173,7 +187,7 @@ def process_chart(file_content, start_measure, end_measure):
         adjusted_midpoints = []
         all_midpoints_except_end = [x for x in slide_midpoints if x['type'] != 'end']
         for midpoint in all_midpoints_except_end:
-            new_midpoint = shifter(midpoint)
+            new_midpoint = deNull(shifter(midpoint))
             adjusted_midpoints.append(new_midpoint)
         if should_cap_ending:
             capped_ending = {
@@ -185,7 +199,7 @@ def process_chart(file_content, start_measure, end_measure):
                 del capped_ending['direction']
             adjusted_midpoints.append(capped_ending)
         else:
-            adjusted_midpoints.append(shifter(end_midpoint))
+            adjusted_midpoints.append(deNull(shifter(end_midpoint)))
         return {
             **slide_object,
             "connections": adjusted_midpoints
