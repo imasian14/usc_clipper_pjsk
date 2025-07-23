@@ -249,7 +249,7 @@ elif selected_usc and selected_usc != "(None)":
         file_content = f.read()
     filename = selected_usc
     song_id = filename.split('_')[0]
-    st.markdown(f"[View on sekai.best](https://sekai.best/music/{song_id})")
+    st.markdown(f"[Download song jacket and music file from sekai.best](https://sekai.best/music/{song_id})")
 
 if file_content is not None:
     if st.button("Clip Chart"):
