@@ -13,6 +13,7 @@ difficulties = ["expert", "master", "append"]
 
 en_musics_url = "https://sekai-world.github.io/sekai-master-db-en-diff/musics.json"
 jp_musics_url = "https://sekai-world.github.io/sekai-master-db-diff/musics.json"
+usctool_path = os.path.join(os.path.dirname(__file__), "usctool.exe")
 
 def sanitize_filename(name: str) -> str:
     # Remove characters not allowed in Windows filenames
@@ -21,12 +22,13 @@ def sanitize_filename(name: str) -> str:
 def run(musics_url: str, url_template: str):
     musics_json = requests.get(musics_url).json()
     os.makedirs("official_charts_sus", exist_ok=True)
+    os.makedirs("official_charts_usc", exist_ok=True)
     for music in musics_json:
         for difficulty in difficulties:   
             song_id = music['id']
             song_title = music['title']
             safe_title = sanitize_filename(song_title)
-            target_file_name = f"./official_charts_sus/{safe_title}_{difficulty}.sus"
+            target_file_name = f"./official_charts_sus/{song_id}_{safe_title}_{difficulty}.sus"
             if difficulty != "append":
                 url = url_template.format(song_id=str(song_id).zfill(4), difficulty=difficulty)
             else:
@@ -47,9 +49,12 @@ def run(musics_url: str, url_template: str):
                     with open(target_file_name, "w", encoding="utf-8") as f:
                         f.write(level_text)
                     # now convert to usc
-                    subprocess.run(["./usctool.exe", "convert", target_file_name, f"./official_charts_usc/{safe_title}_{difficulty}.usc"])
+                    subprocess.run([usctool_path, "convert", target_file_name, f"./official_charts_usc/{song_id}_{safe_title}_{difficulty}.usc"])
                 else:
-                    print(f"Failed to download {url}, status code: {level.status_code}")
+                    if difficulty == "append":
+                        print(f"Append for {safe_title} probably doesn't exist ({level.status_code})")
+                    else:
+                        print(f"Failed to download {url}, status code: {level.status_code}")
 
 run(en_musics_url, sekai_url)
 run(jp_musics_url, sekai_url)
