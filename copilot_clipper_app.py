@@ -213,7 +213,8 @@ def process_chart(file_content, start_measure, end_measure):
 # --- Streamlit Web UI ---
 st.title("Chart Clipper")
 
-st.write("Upload a .usc file, select start and end measures, and download the clipped chart.")
+st.write("Select an existing chart, select start and end measures, and download the clipped chart. Alternatively, upload your own .usc file.")
+st.write("Please ping @imasian. on discord if chart is not available.")
 
 # List .usc files in the 'uscs' folder (relative to this script)
 usc_folder = os.path.join(os.path.dirname(__file__), "official_charts_usc")
@@ -222,10 +223,13 @@ if os.path.exists(usc_folder):
     usc_files = [f for f in os.listdir(usc_folder) if f.lower().endswith(".usc")]
 
 selected_usc = None
-uploaded_file = st.file_uploader("Drag and drop your .usc file here", type=["usc"])
+
+with st.expander("Upload a .usc file manually"):
+    uploaded_file = st.file_uploader("Drag and drop your .usc file here", type=["usc"])
+
 if usc_files:
     selected_usc = st.selectbox(
-        "Or select a .usc file from the 'uscs' folder (searchable):",
+        "Select a .usc file from the 'uscs' folder (searchable):",
         ["(None)"] + usc_files,
         index=0,
         placeholder="Type to search..."
@@ -244,6 +248,8 @@ elif selected_usc and selected_usc != "(None)":
     with open(os.path.join(usc_folder, selected_usc), "rb") as f:
         file_content = f.read()
     filename = selected_usc
+    song_id = filename.split('_')[0]
+    st.markdown(f"[View on sekai.best](https://sekai.best/music/{song_id})")
 
 if file_content is not None:
     if st.button("Clip Chart"):
