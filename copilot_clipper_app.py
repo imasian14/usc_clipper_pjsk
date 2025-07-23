@@ -6,6 +6,8 @@ import os
 import base64
 import streamlit as st
 
+version_number = 1.1
+
 def process_chart(file_content, start_measure, end_measure):
     start_beat = float(start_measure * 4)
     end_beat = float(end_measure * 4)
@@ -229,6 +231,7 @@ st.title("Chart Clipper")
 
 st.write("Select an existing chart, select start and end measures, and download the clipped chart. Alternatively, upload your own .usc file.")
 st.write("Please ping @imasian. on discord if chart is not available.")
+st.write(f"version: {version_number}")
 
 # List .usc files in the 'uscs' folder (relative to this script)
 usc_folder = os.path.join(os.path.dirname(__file__), "official_charts_usc")
