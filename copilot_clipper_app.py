@@ -231,7 +231,7 @@ st.title("Chart Clipper")
 
 st.write("Select an existing chart, select start and end measures, and download the clipped chart. Alternatively, upload your own .usc file.")
 st.write("Please ping @imasian. on discord if chart is not available.")
-st.write(f"version: {version_number}")
+st.write(f"Version: {version_number}")
 
 # List .usc files in the 'uscs' folder (relative to this script)
 usc_folder = os.path.join(os.path.dirname(__file__), "official_charts_usc")
@@ -275,3 +275,5 @@ if file_content is not None:
         out_name = f"clipped_{filename}" if filename else "clipped.usc"
         href = f'<a href="data:application/json;base64,{b64}" download="{out_name}">Download {out_name}</a>'
         st.markdown(href, unsafe_allow_html=True)
+
+# To run streamlit locally: streamlit run .\copilot_clipper_app.py
