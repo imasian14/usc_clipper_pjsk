@@ -1,0 +1,28 @@
+name: Push empty commit every 10 hours
+
+permissions:
+  contents: write
+
+on:
+  schedule:
+    - cron: '0 */10 * * *' # Every 10 hours
+
+jobs:
+  push-empty-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Create empty commit
+        run: |
+          git commit --allow-empty -m "chore: keep repo awake [skip ci]"
+
+      - name: Push commit
+        run: |
+          git push
