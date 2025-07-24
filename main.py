@@ -1,9 +1,7 @@
 import numpy as np
 import pandas as pd
 import json
-import io
 import os
-import base64
 from flask import Flask, render_template_string, request, send_file, redirect, url_for, send_from_directory
 
 version_number = 1.1
