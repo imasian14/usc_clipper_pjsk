@@ -229,6 +229,7 @@ def process_chart(file_content, start_measure, end_measure):
 # --- Streamlit Web UI ---
 st.title("Chart Clipper")
 
+st.write("Tutorial to use this website: https://docs.google.com/document/d/e/2PACX-1vQ_o-nqbWOHlKQJiOhtowcCdvFFNptK1ngGnW85YK-ZKCbfaLR9b4lrdVKQdLfcmzJV_WGtx8uK83tX/pub")
 st.write("Select an existing chart, select start and end measures, and download the clipped chart. Alternatively, upload your own .usc file.")
 st.write("Please ping @imasian. on discord if chart is not available.")
 st.write(f"Version: {version_number}")
