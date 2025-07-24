@@ -1,7 +1,5 @@
 numpy
 pandas
-io
 os
 json
-base64
 flask
