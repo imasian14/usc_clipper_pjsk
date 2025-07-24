@@ -6,7 +6,7 @@ import os
 import base64
 import streamlit as st
 
-version_number = 1.1
+version_number = 1.2
 
 def process_chart(file_content, start_measure, end_measure):
     start_beat = float(start_measure * 4)
@@ -242,16 +242,18 @@ if os.path.exists(usc_folder):
 
 selected_usc = None
 
-with st.expander("Upload a .usc file manually"):
-    uploaded_file = st.file_uploader("Drag and drop your .usc file here", type=["usc"])
-
 if usc_files:
     selected_usc = st.selectbox(
-        "Select a .usc file from the 'uscs' folder (searchable):",
+        "Select a chart here (searchable):",
         ["(None)"] + usc_files,
         index=0,
         placeholder="Type to search..."
     )
+
+with st.expander("Or... Upload a .usc file manually"):
+    uploaded_file = st.file_uploader("Drag and drop your .usc file here", type=["usc"])
+
+
 
 start_measure = st.number_input("Start measure", min_value=0, value=0)
 end_measure = st.number_input("End measure", min_value=start_measure, value=max(1, start_measure + 1))
@@ -267,7 +269,7 @@ elif selected_usc and selected_usc != "(None)":
         file_content = f.read()
     filename = selected_usc
     song_id = filename.split('_')[0]
-    st.markdown(f"[Download song jacket and music file from sekai.best](https://sekai.best/music/{song_id})")
+    st.markdown(f"[Click here to download song jacket and music file from sekai.best](https://sekai.best/music/{song_id})")
 
 if file_content is not None:
     if st.button("Clip Chart"):
