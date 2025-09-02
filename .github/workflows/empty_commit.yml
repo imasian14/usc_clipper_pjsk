@@ -5,7 +5,6 @@ permissions:
 
 on:
   schedule:
-    - cron: '0 */10 * * *' # Every 10 hours
 
 jobs:
   push-empty-commit:
